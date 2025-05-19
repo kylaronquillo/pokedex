@@ -33,7 +33,7 @@ export default function PokemonList({ pokemons }) {
               <h2 className="text-xl font-bold capitalize mb-2">{pokemon.name}</h2>
               <div className="flex flex-wrap gap-2">
                 {pokemon.types.map((type, index) => (
-                  <Badge key={`${type}-${index}`} className={`${getTypeColor(type)} text-white`}>
+                  <Badge key={`${pokemon.id}-${type}-${index}`} className={`${getTypeColor(type)} text-white`}>
                     {type}
                   </Badge>
                 ))}

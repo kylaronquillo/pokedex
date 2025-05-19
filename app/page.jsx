@@ -48,7 +48,14 @@ export default function Home() {
     setLoading(true)
     try {
       const newPokemons = await fetchPokemons(currentOffset, limit, sortOption)
-      setPokemons(prev => [...prev, ...newPokemons])
+      
+      // Create a Set of existing Pokemon IDs
+      const existingIds = new Set(pokemons.map(p => p.id))
+      
+      // Filter out any Pokemon that already exist in the list
+      const uniqueNewPokemons = newPokemons.filter(pokemon => !existingIds.has(pokemon.id))
+      
+      setPokemons(prev => [...prev, ...uniqueNewPokemons])
       setOffset(currentOffset + limit)
     } catch (err) {
       console.error("Error loading pokemons:", err)
