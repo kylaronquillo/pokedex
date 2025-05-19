@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getPokemonImageUrl } from "@/lib/pokemon"
 import { getTypeColor } from "@/lib/pokemon-types"
+
+
 export default function PokemonList({ pokemons }) {
   if (!pokemons || pokemons.length === 0) {
     return null

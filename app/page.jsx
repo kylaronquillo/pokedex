@@ -43,19 +43,21 @@ export default function Home() {
     try {
       const newPokemons = await fetchPokemons(offset, limit, sortBy)
       setPokemons((prev) => {
-        const uniquePokemons = [...prev]
-        newPokemons.forEach((newPokemon) => {
-          if (!uniquePokemons.some((p) => p.id === newPokemon.id)) {
-            uniquePokemons.push(newPokemon)
-          }
-        })
-        // Sort the entire array after adding new Pokemon
-        if (sortBy === "name") {
-          uniquePokemons.sort((a, b) => a.name.localeCompare(b.name))
-        } else {
-          uniquePokemons.sort((a, b) => a.id - b.id)
+        // For ID sorting, just append
+        if (sortBy === "id") {
+          return [...prev, ...newPokemons]
         }
-        return uniquePokemons
+        // For name sorting, combine and resort
+        else {
+          const uniquePokemons = [...prev]
+          newPokemons.forEach((newPokemon) => {
+            if (!uniquePokemons.some((p) => p.id === newPokemon.id)) {
+              uniquePokemons.push(newPokemon)
+            }
+          })
+          uniquePokemons.sort((a, b) => a.name.localeCompare(b.name))
+          return uniquePokemons
+        }
       })
       setOffset((prev) => prev + limit)
     } catch (error) {
@@ -94,9 +96,9 @@ export default function Home() {
 
   const handleSortChange = (value) => {
     setSortBy(value)
-    // Reset pagination when sort changes
     setOffset(0)
     setPokemons([])
+    setFilteredPokemons([])
   }
 
   return (
