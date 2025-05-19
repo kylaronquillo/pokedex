@@ -12,10 +12,11 @@ import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getTypeColor } from "@/lib/pokemon-types"
 import { fetchPokemonDetails, getPokemonImageUrl, getTypeWeaknesses } from "@/lib/pokemon"
+import { use } from "react"
 
 export default function PokemonDetail({ params }) {
   const router = useRouter()
-  const { id } = params
+  const id = use(params).id
   const [pokemon, setPokemon] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -47,7 +48,6 @@ export default function PokemonDetail({ params }) {
     }
   }
 
-
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -75,22 +75,22 @@ export default function PokemonDetail({ params }) {
     )
   }
 
-  // if (!pokemon) {
-  //   return (
-  //     <div className="container mx-auto px-4 py-8">
-  //       <div className="flex items-center mb-6">
-  //         <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
-  //           <ArrowLeft className="mr-2 h-4 w-4" />
-  //           Back to Pokédex
-  //         </Link>
-  //       </div>
-  //       <div className="text-center py-12">
-  //         <h2 className="text-2xl font-bold">Pokémon not found</h2>
-  //         <p className="text-muted-foreground mt-2">The Pokémon you're looking for doesn't exist.</p>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  if (!pokemon) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center mb-6">
+          <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Pokédex
+          </Link>
+        </div>
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold">Pokémon not found</h2>
+          <p className="text-muted-foreground mt-2">The Pokémon you're looking for doesn't exist.</p>
+        </div>
+      </div>
+    )
+  }
 
   const weaknesses = getTypeWeaknesses(pokemon.types)
 
