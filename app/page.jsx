@@ -19,7 +19,7 @@ export default function Home() {
 
   useEffect(() => {
     loadPokemons()
-  }, [])
+  }, [sortBy]) // Reload when sort changes
 
   useEffect(() => {
     if (!isSearching) {
@@ -34,22 +34,14 @@ export default function Home() {
         )
       }
 
-      // Sort by selected option
-      if (sortBy === "id") {
-        filtered.sort((a, b) => a.id - b.id)
-      } else if (sortBy === "name") {
-        filtered.sort((a, b) => a.name.localeCompare(b.name))
-      }
-
       setFilteredPokemons(filtered)
     }
-  }, [pokemons, searchQuery, sortBy, isSearching])
+  }, [pokemons, searchQuery, isSearching])
 
   const loadPokemons = async () => {
     setLoading(true)
     try {
-      const newPokemons = await fetchPokemons(offset, limit)
-      // Add new pokemons while preventing duplicates
+      const newPokemons = await fetchPokemons(offset, limit, sortBy)
       setPokemons((prev) => {
         const uniquePokemons = [...prev]
         newPokemons.forEach((newPokemon) => {
@@ -57,6 +49,12 @@ export default function Home() {
             uniquePokemons.push(newPokemon)
           }
         })
+        // Sort the entire array after adding new Pokemon
+        if (sortBy === "name") {
+          uniquePokemons.sort((a, b) => a.name.localeCompare(b.name))
+        } else {
+          uniquePokemons.sort((a, b) => a.id - b.id)
+        }
         return uniquePokemons
       })
       setOffset((prev) => prev + limit)
@@ -76,6 +74,12 @@ export default function Home() {
       setLoading(true)
       try {
         const searchResults = await searchPokemons(value)
+        // Sort search results according to current sort preference
+        if (sortBy === "name") {
+          searchResults.sort((a, b) => a.name.localeCompare(b.name))
+        } else {
+          searchResults.sort((a, b) => a.id - b.id)
+        }
         setFilteredPokemons(searchResults)
       } catch (error) {
         console.error("Error searching pokemons:", error)
@@ -90,15 +94,9 @@ export default function Home() {
 
   const handleSortChange = (value) => {
     setSortBy(value)
-    if (!isSearching) {
-      let sorted = [...filteredPokemons]
-      if (value === "id") {
-        sorted.sort((a, b) => a.id - b.id)
-      } else if (value === "name") {
-        sorted.sort((a, b) => a.name.localeCompare(b.name))
-      }
-      setFilteredPokemons(sorted)
-    }
+    // Reset pagination when sort changes
+    setOffset(0)
+    setPokemons([])
   }
 
   return (
@@ -128,7 +126,7 @@ export default function Home() {
         <p className="text-center text-muted-foreground mt-8">No Pokémon found</p>
       )}
 
-      {pokemons.length > 0 && filteredPokemons.length > 0 && !searchQuery && !isSearching && (
+      {!searchQuery && !isSearching && (
         <div className="flex justify-center mt-8">
           <Button onClick={loadPokemons} disabled={loading} className="px-8">
             {loading ? "Loading..." : "Load More"}
