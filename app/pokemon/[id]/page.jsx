@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
+import { getTypeColor } from "@/lib/pokemon-types"
 import { fetchPokemonDetails, getPokemonImageUrl, getTypeWeaknesses } from "@/lib/pokemon"
 
 export default function PokemonDetail({ params }) {
@@ -46,30 +47,6 @@ export default function PokemonDetail({ params }) {
     }
   }
 
-  const getTypeColor = (type) => {
-    const typeColors = {
-      normal: "bg-gray-400",
-      fire: "bg-orange-500",
-      water: "bg-blue-500",
-      electric: "bg-yellow-400",
-      grass: "bg-green-500",
-      ice: "bg-blue-300",
-      fighting: "bg-red-700",
-      poison: "bg-purple-500",
-      ground: "bg-yellow-700",
-      flying: "bg-indigo-300",
-      psychic: "bg-pink-500",
-      bug: "bg-lime-500",
-      rock: "bg-yellow-800",
-      ghost: "bg-purple-700",
-      dragon: "bg-indigo-700",
-      dark: "bg-gray-800",
-      steel: "bg-gray-500",
-      fairy: "bg-pink-300",
-    }
-
-    return typeColors[type] || "bg-gray-400"
-  }
 
   if (loading) {
     return (
@@ -98,29 +75,29 @@ export default function PokemonDetail({ params }) {
     )
   }
 
-  if (!pokemon) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center mb-6">
-          <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Pokédex
-          </Link>
-        </div>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-bold">Pokémon not found</h2>
-          <p className="text-muted-foreground mt-2">The Pokémon you're looking for doesn't exist.</p>
-        </div>
-      </div>
-    )
-  }
+  // if (!pokemon) {
+  //   return (
+  //     <div className="container mx-auto px-4 py-8">
+  //       <div className="flex items-center mb-6">
+  //         <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
+  //           <ArrowLeft className="mr-2 h-4 w-4" />
+  //           Back to Pokédex
+  //         </Link>
+  //       </div>
+  //       <div className="text-center py-12">
+  //         <h2 className="text-2xl font-bold">Pokémon not found</h2>
+  //         <p className="text-muted-foreground mt-2">The Pokémon you're looking for doesn't exist.</p>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   const weaknesses = getTypeWeaknesses(pokemon.types)
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
+        <Link href="/" className="flex items-center hover:text-foreground">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Pokédex
         </Link>
@@ -138,12 +115,12 @@ export default function PokemonDetail({ params }) {
 
       <div className="grid md:grid-cols-2 gap-8">
         <Card className="overflow-hidden">
-          <div className="bg-muted p-8 flex justify-center">
+          <div className="p-8 flex justify-center items-center">
             <Image
               src={getPokemonImageUrl(pokemon.id) || "/placeholder.svg"}
               alt={pokemon.name}
-              width={300}
-              height={300}
+              width={500}
+              height={500}
               className="object-contain"
               priority
             />
