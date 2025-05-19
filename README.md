@@ -11,5 +11,6 @@ A simple and fun Pokedex web app that allows you to explore different Pokémon.
    git clone https://github.com/your-username/pokedex.git
 
 2. Run the following in your terminal:
-    ''' cd pokedex
-    '''npm run dev
+    ```bash
+    cd pokedex
+    npm run dev
