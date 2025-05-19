@@ -14,3 +14,8 @@ A simple and fun Pokedex web app that allows you to explore different Pokémon.
     ```bash
     cd pokedex
     npm run dev
+
+3. Aside from Tailwind, I also used the following:
+   ```bash
+   npm install @radix-ui/themes
+   npm install lucide-react
